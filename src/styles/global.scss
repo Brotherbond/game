@@ -1,0 +1,177 @@
+$red: #e31642;
+$red-dark: #50091e;
+$green: #19c359;
+$green-dark: #1a381d;
+$purple: #211f4f;
+$blue-light: #2680ea;
+$blue-dark1: #2d4c95;
+$blue-dark2: #225eff;
+$black: #060606;
+$black-button: #070707;
+$header-black: #161616;
+$white: #fefefe;
+$primary-text: #d4b37f;
+$body-bg: #3a3a3a;
+$square1: 44px;
+$square2: 100px;
+$square3: 150px;
+$margin: 16px;
+
+@mixin flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    text-align: initial;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    line-height: 1;
+}
+
+
+
+body {
+    background-color: $body-bg;
+    color: $primary-text;
+    font-weight: 500;
+}
+
+button {
+    padding: 8px 16px;
+    color: $primary-text;
+    background-color: $black-button;
+    border-radius: 25px;
+    border: 1px solid $primary-text;
+    font-weight: 700;
+
+    &:hover {
+        opacity: 0.5;
+    }
+}
+
+.App {
+    @include flex;
+    flex-direction: column;
+}
+
+.App-header {
+    background-color: $header-black;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    @include flex;
+}
+
+
+.App-main {
+    min-height: 100vh;
+    @include flex;
+    flex-direction: column;
+}
+
+.flex {
+    @include flex;
+}
+
+.hide {
+    display: none !important;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.white {
+    color: $white;
+}
+
+.green {
+    color: $green;
+}
+
+.m {
+    margin: $margin;
+
+    @at-root #{&+2y} {
+        margin-top: 2*$margin;
+        margin-bottom: 2*$margin;
+
+    }
+
+    @at-root #{&+2x} {
+        margin-left: 2*$margin;
+        margin-right: 2*$margin;
+
+    }
+
+}
+
+
+.box {
+    border-radius: 12px;
+    cursor: pointer;
+    @include flex;
+    flex-direction: column;
+    border: 1px solid;
+    width: $square2;
+    height: $square2;
+
+    @media only screen and (min-width: 768px) {
+        width: $square3;
+        height: $square3;
+
+    }
+
+    &:hover {
+        opacity: 0.5;
+    }
+
+    @at-root #{&+'-green'} {
+        color: $green;
+        background-color: $green-dark;
+    }
+
+    @at-root #{&+'-purple'} {
+        color: $blue-light;
+        background-color: $purple;
+    }
+
+    @at-root #{&+'-red'} {
+        color: $red;
+        background-color: $red-dark;
+    }
+
+    &>div {
+        &:first-child {
+            border-radius: 50%;
+            background-color: $white;
+            padding: 4px;
+            border: 4px solid $blue-dark1;
+            color: $black;
+            width: $square1;
+            height: $square1;
+            @include flex;
+            margin-bottom: $margin;
+
+        }
+
+        &:last-child {
+            font-weight: 700;
+        }
+
+    }
+}
