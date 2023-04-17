@@ -1,11 +1,12 @@
-const Header = (): JSX.Element => {
+const Header = ({ balance, bet }: { balance: number, bet: number }): JSX.Element => {
 
     return <>
-        <section>
-            <div>BALANCE:XXXX</div>
-            <div>BET:XXX</div>
-            <div>WIN:X</div>
-        </section>
+        <header className="App-header">
+            <div>BALANCE: <span className="white">{balance}</span></div>
+            <div className='m m2x'>BET: <span className="white">{bet}</span></div>
+            <div>WIN: <span className="white">X</span></div>
+        </header>
     </>
 
 }
+export default Header
