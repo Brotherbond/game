@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useEffect, useCallback, useState } from "react"
 import { RootState } from "../redux/store"
-import { updateBet, calculateTotalBet, betPrice, useBetDispatch, useBetSelector, Choices, choiceLength } from '../redux/bet'
+import { updateBet, calculateTotalBet, betPrice, useBetDispatch, useBetSelector, Choices, choiceLength, Bet } from '../redux/bet'
 import { usePlayerSelector } from '../redux/player'
 
 
@@ -13,6 +13,7 @@ const GameButton = ({ button }: { button: Button }): JSX.Element => {
   const dispatch = useBetDispatch()
   enum Increase { DECREMENT, INCREMENT }
   const [val, setVal] = useState<number>(0)
+  const findValIndexInBet = useCallback((bet: Bet) => bet.findIndex(betItem => betItem.choice === button.type), [button.type])
   const updateVal = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement>, increase: Increase | -1 = -1) => {
     let tempoBet = [...bet]
     let tempoCard = { choice: button.type, count: val }
@@ -22,7 +23,7 @@ const GameButton = ({ button }: { button: Button }): JSX.Element => {
     else {
       tempoCard.count = parseInt(e.currentTarget.value)
     }
-    const cardInBet = tempoBet.findIndex(betItem => betItem.choice === button.type)
+    const cardInBet = findValIndexInBet(tempoBet)
     if (tempoCard.count < 0) { return }
     if (cardInBet > -1) {
       if (tempoCard.count === 0) { tempoBet.splice(cardInBet, 1) }
@@ -34,15 +35,21 @@ const GameButton = ({ button }: { button: Button }): JSX.Element => {
         return
       }
     }
-    if ((balance - calculateTotalBet(tempoBet)) > 0) {
+    if ((balance - calculateTotalBet(tempoBet)) >= 0) {      
       dispatch(updateBet(tempoBet))
-      setVal(() => tempoCard.count)
     } else {
       alert('Balance not sufficient')
     }
-
-
   }
+  useEffect(() => {
+    let betIndex = findValIndexInBet(bet)
+    if (betIndex > -1) {
+      setVal(() => bet[betIndex].count)
+    } else {
+      setVal(() => 0)
+    }
+
+  }, [bet, findValIndexInBet])
   return <>
     <div className={`box box-${button.color}`} data-testid={button.type} onClick={() => { }} >
       <div className={val === 0 ? 'invisible' : ""}>{betPrice * val}</div>
