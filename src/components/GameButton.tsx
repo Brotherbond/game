@@ -1,31 +1,47 @@
 import { useState } from "react"
-import { updateBet, betPrice, useAppDispatch, useAppSelector, Choices } from '../redux/bet'
+import { RootState } from "../redux/store"
+import { updateBet, totalBet, betPrice, useBetDispatch, useBetSelector, Choices, choiceLength } from '../redux/bet'
+import { usePlayerSelector } from '../redux/player'
 
 
 export interface Button { color: string, type: number }
 
 
 const GameButton = ({ button }: { button: Button }): JSX.Element => {
-  const { bet } = useAppSelector(state => state.bet)
-  const dispatch = useAppDispatch()
+  const { bet } = useBetSelector((state: RootState) => state.bet)
+  const { player: {balance} }  = usePlayerSelector((state: RootState) => state.player)
+  const dispatch = useBetDispatch()
   enum Increase { DECREMENT, INCREMENT }
   const [val, setVal] = useState<number>(0)
-  const updateVal = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement>, increase?: Increase) => {
-    const value = e.currentTarget.value
-    const totalBet = bet.reduce((i, j) => (i + j.count), 0)
-    const index = bet.findIndex(betItem => betItem.choice === button.type)
-    if (bet.length < 2) {
-      if (value) {
-        const newValue = parseInt(value)
-        setVal(() => newValue > 0 ? newValue : 0)
+  const updateVal = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement>, increase: Increase | -1 = -1) => {
+    let tempoBet = [...bet]
+    let tempoCard = { choice: button.type, count: val }
+    if (increase >= 0) {
+      tempoCard.count = increase === Increase.DECREMENT ? --tempoCard.count : ++tempoCard.count
+    }
+    else {
+      tempoCard.count = parseInt(e.currentTarget.value)
+    }
+    const cardInBet = tempoBet.findIndex(betItem => betItem.choice === button.type)
+    if (cardInBet > -1) {
+      tempoBet[cardInBet] = tempoCard
+    } else {
+      if (tempoBet.length < choiceLength - 1) {
+        tempoBet.push(tempoCard)
       }
       else {
-        setVal(prevValue => increase === Increase.DECREMENT ? (prevValue > 0 ? --prevValue : 0) : ++prevValue)
+        alert(`Only ${choiceLength} selection allowed`)
       }
-      dispatch(updateBet([{ choice: button.type, count: val }, 0]))
-    } else {
-      alert('Only to two selection is allowed')
     }
+    if ((balance - totalBet(tempoBet)) > 0) {
+      // dispatch(updateBet([tempoBet, 0]))
+      // dispatch(updateBet([tempoCard, 0]))
+      setVal(() => tempoCard.count)
+    } else {
+      alert('Balance not sufficient')
+    }
+
+
   }
   return <>
     <div className={`box box-${button.color}`} data-testid={button.type} onClick={() => { }} >
