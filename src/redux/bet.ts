@@ -18,7 +18,7 @@ export const { actions, reducer } = createSlice({
         bet: [] as Bet
     },
     reducers: {
-        updateBet: (state, action) => state.bet[action.payload[1]] = action.payload[0],
+        updateBet: (state, action) => {state.bet = action.payload},
         refreshBetSelection: (state) => { state.bet = [] }
     }
 })

@@ -9,7 +9,7 @@ export interface Button { color: string, type: number }
 
 const GameButton = ({ button }: { button: Button }): JSX.Element => {
   const { bet } = useBetSelector((state: RootState) => state.bet)
-  const { player: {balance} }  = usePlayerSelector((state: RootState) => state.player)
+  const { player: { balance } } = usePlayerSelector((state: RootState) => state.player)
   const dispatch = useBetDispatch()
   enum Increase { DECREMENT, INCREMENT }
   const [val, setVal] = useState<number>(0)
@@ -24,18 +24,17 @@ const GameButton = ({ button }: { button: Button }): JSX.Element => {
     }
     const cardInBet = tempoBet.findIndex(betItem => betItem.choice === button.type)
     if (cardInBet > -1) {
-      tempoBet[cardInBet] = tempoCard
+      if (tempoCard.count === 0) { tempoBet.splice(cardInBet, 1) }
+      else { tempoBet[cardInBet] = tempoCard }
     } else {
-      if (tempoBet.length < choiceLength - 1) {
-        tempoBet.push(tempoCard)
-      }
+      if (tempoBet.length < choiceLength - 1) { tempoBet.push(tempoCard) }
       else {
-        alert(`Only ${choiceLength} selection allowed`)
+        alert(`Only ${choiceLength - 1} selection allowed`)
+        return
       }
     }
     if ((balance - totalBet(tempoBet)) > 0) {
-      // dispatch(updateBet([tempoBet, 0]))
-      // dispatch(updateBet([tempoCard, 0]))
+      dispatch(updateBet(tempoBet))
       setVal(() => tempoCard.count)
     } else {
       alert('Balance not sufficient')

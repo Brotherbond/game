@@ -17,7 +17,7 @@ export const { actions, reducer } = createSlice({
         player: { balance: 5000 } as User
     },
     reducers: {
-        updatePlayer: (state, action) => (state.player.balance = action.payload),
+        updatePlayer: (state, action) => {state.player = action.payload},
     }
 })
 
