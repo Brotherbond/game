@@ -2,12 +2,13 @@ import { useEffect, useCallback, useState } from "react"
 import { RootState } from "../redux/store"
 import { updateBet, calculateTotalBet, betPrice, useBetDispatch, useBetSelector, Choices, choiceLength, Bet } from '../redux/bet'
 import { usePlayerSelector } from '../redux/player'
+import { Control } from "../App"
 
 
 export interface Button { color: string, type: number }
 
 
-const GameButton = ({ button }: { button: Button }): JSX.Element => {
+const GameButton = ({ button, control }: { button: Button, control: Control }): JSX.Element => {
   const { bet } = useBetSelector((state: RootState) => state.bet)
   const { player: { balance } } = usePlayerSelector((state: RootState) => state.player)
   const dispatch = useBetDispatch()
@@ -35,7 +36,7 @@ const GameButton = ({ button }: { button: Button }): JSX.Element => {
         return
       }
     }
-    if ((balance - calculateTotalBet(tempoBet)) >= 0) {      
+    if ((balance - calculateTotalBet(tempoBet)) >= 0) {
       dispatch(updateBet(tempoBet))
     } else {
       alert('Balance not sufficient')
@@ -53,7 +54,7 @@ const GameButton = ({ button }: { button: Button }): JSX.Element => {
   return <>
     <div className={`box box-${button.color}`} data-testid={button.type} onClick={() => { }} >
       <div className={val === 0 ? 'invisible' : ""}>{betPrice * val}</div>
-      <div className="invisible flex ads">
+      <div className={`invisible flex ${control === Control.PLAY ? "betPosition" : ""}`}>
         <button onClick={e => updateVal(e, Increase.DECREMENT)}>-</button>
         <input type="number" value={val.toFixed(0)} title='multiply' onChange={updateVal} />
         <button onClick={e => updateVal(e, Increase.INCREMENT)}>+</button>

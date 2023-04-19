@@ -135,11 +135,11 @@ input[type=number] {
 }
 
 .blue {
-    color: $blue-dark3;
+    color: $blue-light;
 }
 
 .red {
-    color: $red-dark;
+    color: $red;
 }
 
 .m {
@@ -203,12 +203,12 @@ input[type=number] {
     }
 
     &:hover {
-        .ads {
+        .betPosition {
             visibility: visible;
         }
     }
 
-    .ads {
+    .betPosition {
         button {
             background: white;
             border-radius: 50%;

@@ -7,6 +7,7 @@ export const useBetDispatch: DispatchFunc = useDispatch
 export const useBetSelector: TypedUseSelectorHook<RootState> = useSelector
 export const betPrice = 500
 export enum Choices { ROCK, PAPER, SCISSORS }
+export const colors = ['blue', 'green', 'red']
 export const choiceLength = Object.entries(Choices).length / 2
 export type Bet = { choice: Choices, count: number }[]
 export const calculateTotalBet = (bet: Bet) => betPrice * bet.reduce((i, j) => (i + j.count), 0)
