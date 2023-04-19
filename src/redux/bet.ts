@@ -9,7 +9,7 @@ export const betPrice = 500
 export enum Choices { ROCK, PAPER, SCISSORS }
 export const choiceLength = Object.entries(Choices).length / 2
 export type Bet = { choice: Choices, count: number }[]
-export const totalBet = (bet: Bet) => bet.reduce((i, j) => (i + j.count), 0)
+export const calculateTotalBet = (bet: Bet) => betPrice * bet.reduce((i, j) => (i + j.count), 0)
 
 
 export const { actions, reducer } = createSlice({
@@ -18,7 +18,7 @@ export const { actions, reducer } = createSlice({
         bet: [] as Bet
     },
     reducers: {
-        updateBet: (state, action) => {state.bet = action.payload},
+        updateBet: (state, action) => { state.bet = action.payload },
         refreshBetSelection: (state) => { state.bet = [] }
     }
 })

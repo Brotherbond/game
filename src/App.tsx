@@ -2,7 +2,7 @@ import './styles/global.scss'
 import Header from "./components/Header"
 import { useState } from "react"
 import GameButton from './components/GameButton'
-import { Bet, betPrice, Choices, choiceLength, useBetSelector, refreshBetSelection } from './redux/bet'
+import { Bet, betPrice, calculateTotalBet, Choices, choiceLength, useBetSelector, refreshBetSelection} from './redux/bet'
 import { updatePlayer, usePlayerSelector, usePlayerDispatch } from './redux/player'
 import { RootState } from './redux/store'
 
@@ -36,7 +36,7 @@ function App() {
     });
   }
 
-  const totalBet = bet.reduce((i, j) => (i + j.count), 0)
+  const totalBet = calculateTotalBet(bet)
   const removeBet = () => dispatchPlayer(updatePlayer({ balance: player.balance - betPrice }))
   const handleWin = (returns: number, betCount: number) => dispatchPlayer(updatePlayer({ balance: player.balance + (betPrice * returns * betCount) }))
   const handleResult = () => betResult(bet).forEach((resultItem, i) => resultItem === Result.WIN && handleWin(bet.length === 1 ? 14 : 3, bet[i].count))

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { RootState } from "../redux/store"
-import { updateBet, totalBet, betPrice, useBetDispatch, useBetSelector, Choices, choiceLength } from '../redux/bet'
+import { updateBet, calculateTotalBet, betPrice, useBetDispatch, useBetSelector, Choices, choiceLength } from '../redux/bet'
 import { usePlayerSelector } from '../redux/player'
 
 
@@ -23,17 +23,18 @@ const GameButton = ({ button }: { button: Button }): JSX.Element => {
       tempoCard.count = parseInt(e.currentTarget.value)
     }
     const cardInBet = tempoBet.findIndex(betItem => betItem.choice === button.type)
+    if (tempoCard.count < 0) { return }
     if (cardInBet > -1) {
       if (tempoCard.count === 0) { tempoBet.splice(cardInBet, 1) }
       else { tempoBet[cardInBet] = tempoCard }
     } else {
       if (tempoBet.length < choiceLength - 1) { tempoBet.push(tempoCard) }
       else {
-        alert(`Only ${choiceLength - 1} selection allowed`)
+        alert(`Only ${choiceLength - 1} selections allowed`)
         return
       }
     }
-    if ((balance - totalBet(tempoBet)) > 0) {
+    if ((balance - calculateTotalBet(tempoBet)) > 0) {
       dispatch(updateBet(tempoBet))
       setVal(() => tempoCard.count)
     } else {
