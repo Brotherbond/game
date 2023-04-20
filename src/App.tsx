@@ -7,7 +7,6 @@ import { updatePlayer, usePlayerSelector, usePlayerDispatch } from './redux/play
 import { RootState } from './redux/store'
 
 
-
 enum Result { DRAW, LOSE, WIN }
 export enum Control { PLAY, CANCEL }
 
@@ -18,15 +17,17 @@ function App() {
   const dispatchPlayer = usePlayerDispatch()
   const [control, setControl] = useState<Control>(Control.PLAY)
   const [win, setWin] = useState<number>(0)
-  let computerChoice: number = 0
+  const [result, setResult] = useState<Result[]>([])
+  const [computerChoice, setComputerChoice] = useState<number | undefined>()
 
   const mod = (a: number, b: number) => {
     const c = a % b;
     return c < 0 ? c + b : c;
   }
 
-  const betResult = (bet: Bet) => {
-    computerChoice = Math.floor(Math.random() * 3)
+  const calculateResult = (bet: Bet) => {
+    const computerChoice = Math.floor(Math.random() * 3)
+    setComputerChoice(() => computerChoice)
     return bet.map(betPosition => {
       if (betPosition.choice === computerChoice) {
         return Result.DRAW;
@@ -39,20 +40,22 @@ function App() {
   }
 
   const totalBet = calculateTotalBet(bet)
-  const removeBet = () => dispatchPlayer(updatePlayer({ balance: player.balance - totalBet }))
-  const handleWin = (returns: number, betCount: number) => {
-    const win = betPrice * returns * betCount
+  const calculateWin = (returns: number, betCount: number) => betPrice * returns * betCount
+  const handleResult = () => {
+    const betResult = calculateResult(bet)
+    setResult(() => betResult)
+    const win = betResult.reduce((totalWin, resultItem, i) => {
+      return resultItem === Result.WIN ? calculateWin(bet.length === 1 ? 14 : 3, bet[i].count) + totalWin : totalWin
+    }, 0)
     setWin(() => win)
-    dispatchPlayer(updatePlayer({ balance: player.balance + win }))
+    dispatchPlayer(updatePlayer({ balance: player.balance + win - totalBet }))
   }
-  const handleResult = () => betResult(bet).forEach((resultItem, i) => resultItem === Result.WIN && handleWin(bet.length === 1 ? 14 : 3, bet[i].count))
   const handleControl = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (control === Control.PLAY) {
       if (bet.length === 0) {
         alert('Please select position')
       }
       else {
-        removeBet()
         handleResult()
         setControl(Control.CANCEL)
       }
@@ -70,15 +73,17 @@ function App() {
         {control === Control.CANCEL &&
           <>
             <div>
-              <h2 className='green'>PAPER WON</h2>
+              <h2>
+                {result.map((betResultItem, i) => <span key={i}><span className={colors[bet[i].choice]}>{`${Choices[bet[i].choice]} ${Result[betResultItem]}`}</span>{i < bet.length - 1 ? " , " : ""}</span>)}
+              </h2>
               <br />
-              <h4>YOU WIN <span className="white m">{win}</span></h4>
+              <h4 className='flex'>YOU WIN <span className="white m">{win}</span></h4>
               <br />
             </div>
             <h3>
-              <span className="white">{Choices[computerChoice]}</span>
+              <span className="white">{computerChoice !== undefined && Choices[computerChoice]}</span>
               <span className='m2x'>VS</span>
-              {[bet.map((betItem, i) => <><span className={colors[betItem.choice]}>{Choices[betItem.choice]}</span><span className="white">{i < bet.length - 1 ? " , " : ""}</span></>)]}
+              {[bet.map((betItem, i) => <span key={i}><span className={colors[betItem.choice]}>{Choices[betItem.choice]}</span><span className="white">{i < bet.length - 1 ? " , " : ""}</span></span>)]}
             </h3>
           </>
         }
