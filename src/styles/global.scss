@@ -84,8 +84,8 @@ button {
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 input[type=number] {
@@ -118,8 +118,8 @@ input[type=number] {
     @include flex;
 }
 
-.hide {
-    display: none !important;
+.wrap {
+    flex-wrap: wrap;
 }
 
 .invisible {
@@ -165,6 +165,7 @@ input[type=number] {
     @include flex;
     justify-content: space-between;
     padding: 0.5* $square1;
+    margin: 0.5* $square1;
     flex-direction: column;
     border: 1px solid;
     width: $square4;
@@ -196,10 +197,6 @@ input[type=number] {
     @at-root #{&+'-red'} {
         color: $red;
         background-color: $red-dark;
-    }
-
-    &:nth-child(2) {
-        @extend .m
     }
 
     &:hover {

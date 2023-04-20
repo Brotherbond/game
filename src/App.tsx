@@ -89,7 +89,7 @@ function App() {
         }
 
         {control === Control.PLAY && <p className='m'>PICK YOUR POSITIONS</p>}
-        <div className='flex'>
+        <div className='flex wrap'>
           {colors.length === choiceLength && colors.map((choice, i) => <GameButton key={i} {...{ button: { color: choice, type: i }, control }} />)}
         </div>
         <div><button className='control m' data-testid="control" onClick={handleControl}>{Control[control]}</button></div>
