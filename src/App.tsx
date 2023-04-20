@@ -65,7 +65,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header balance={player.balance} bet={totalBet} win={win} />
+      <Header {...{ balance: player.balance, bet: totalBet, win }} />
       <section className='App-main'>
         {control === Control.CANCEL &&
           <>
@@ -85,7 +85,7 @@ function App() {
 
         {control === Control.PLAY && <p className='m'>PICK YOUR POSITIONS</p>}
         <div className='flex'>
-          {colors.map((choice, i) => <GameButton key={i} button={{ color: choice, type: i }} control={control} />)}
+          {colors.map((choice, i) => <GameButton key={i} {...{ button: { color: choice, type: i }, control }} />)}
         </div>
         <div><button className='control m' data-testid="control" onClick={handleControl}>{Control[control]}</button></div>
       </section>

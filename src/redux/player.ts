@@ -1,23 +1,24 @@
-import { createSlice} from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import type { RootState, AppDispatch } from './store'
 
 
-interface User {
+export interface User {
     balance: number
 }
 
 type DispatchFunc = () => AppDispatch
 export const usePlayerDispatch: DispatchFunc = useDispatch
 export const usePlayerSelector: TypedUseSelectorHook<RootState> = useSelector
+export const initialBalance = 5000
 
 export const { actions, reducer } = createSlice({
     name: "player",
     initialState: {
-        player: { balance: 5000 } as User
+        player: { balance: initialBalance } as User
     },
     reducers: {
-        updatePlayer: (state, action) => {state.player = action.payload},
+        updatePlayer: (state, action) => { state.player = action.payload },
     }
 })
 
