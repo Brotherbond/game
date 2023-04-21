@@ -4,7 +4,18 @@ REPO: https://github.com/Brotherbond/game
 
 DEMO: https://game-brotherbond.vercel.app/
 
+VIDEO: https://www.loom.com/share/6eea8343f71e472b977001d289f8e920
+
 <br/><br/>
+
+<div style="font-size:20px;">NB: Check video for a brief overview of how the system works </div> 
+
+<br/>
+
+### `Setting up`
+
+1. clone the repository
+2. From a terminal of the cloned repo folder, run  "npm i && npm start"
 
 ### `npm start`
 
