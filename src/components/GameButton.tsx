@@ -55,9 +55,9 @@ const GameButton = ({ button, control }: { button: Button, control: Control }): 
     <div className={`box box-${button.color}`} data-testid={button.type} onClick={() => { }} >
       <div className={val === 0 ? 'invisible' : ""}>{betPrice * val}</div>
       <div className={`invisible flex ${control === Control.PLAY ? "betPosition" : ""}`}>
-        <button onClick={e => updateVal(e, Increase.DECREMENT)}>-</button>
-        <input type="number" value={val.toFixed(0)} title='multiply' onChange={updateVal} />
-        <button onClick={e => updateVal(e, Increase.INCREMENT)}>+</button>
+        <button data-testid={`decrement${button.type}`} onClick={e => updateVal(e, Increase.DECREMENT)}>-</button>
+        <input data-testid={`box-input-${button.type}`} type="number" value={val.toFixed(0)} title='multiply' onChange={updateVal} />
+        <button data-testid={`increment${button.type}`} onClick={e => updateVal(e, Increase.INCREMENT)}>+</button>
       </div>
       <div>{Choices[button.type]}</div>
     </div>
