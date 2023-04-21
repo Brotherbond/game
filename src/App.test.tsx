@@ -27,6 +27,6 @@ describe('Testing Events', () => {
     render(<Provider store={store}><App /></Provider>)    
     await user.click(screen.getByTestId("increment0"))
     await user.click(screen.getByTestId(/control/i))
-    expect(screen.getByTestId('control').innerHTML).toEqual(Control[Control.CANCEL])
+    expect(screen.getByTestId('control').innerHTML).toEqual(Control[Control.CLEAR])
   })
 })

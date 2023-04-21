@@ -8,7 +8,7 @@ import { RootState } from './redux/store'
 
 
 enum Result { DRAW, LOSE, WIN }
-export enum Control { PLAY, CANCEL }
+export enum Control { PLAY, CLEAR }
 
 function App() {
   const { bet } = useBetSelector((state: RootState) => state.bet)
@@ -57,7 +57,7 @@ function App() {
       }
       else {
         handleResult()
-        setControl(Control.CANCEL)
+        setControl(Control.CLEAR)
       }
     } else {
       dispatchBet(refreshBetSelection())
@@ -70,7 +70,7 @@ function App() {
     <div className="App">
       <Header {...{ balance: player.balance, bet: totalBet, win }} />
       <section className='App-main'>
-        {control === Control.CANCEL &&
+        {control === Control.CLEAR &&
           <>
             <div>
               <h2>
