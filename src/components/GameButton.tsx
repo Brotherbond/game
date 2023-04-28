@@ -16,8 +16,7 @@ const GameButton = ({ button, control }: { button: Button, control: Control }): 
   const [val, setVal] = useState<number>(0)
   const findValIndexInBet = useCallback((bet: Bet) => bet.findIndex(betItem => betItem.choice === button.type), [button.type])
   const updateVal = (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLButtonElement>, increase: Increase | -1 = -1) => {
-    let tempoBet = [...bet]
-    let tempoCard = { choice: button.type, count: val }
+    const [tempoBet, tempoCard] = [[...bet], { choice: button.type, count: val }]
     if (increase >= 0) {
       tempoCard.count = increase === Increase.DECREMENT ? --tempoCard.count : ++tempoCard.count
     }
@@ -43,7 +42,7 @@ const GameButton = ({ button, control }: { button: Button, control: Control }): 
     }
   }
   useEffect(() => {
-    let betIndex = findValIndexInBet(bet)
+    const betIndex = findValIndexInBet(bet)
     if (betIndex > -1) {
       setVal(() => bet[betIndex].count)
     } else {
@@ -52,7 +51,7 @@ const GameButton = ({ button, control }: { button: Button, control: Control }): 
 
   }, [bet, findValIndexInBet])
   return <>
-    <div className={`box box-${button.color}`} data-testid={button.type} onClick={() => { }} >
+    <div className={`box box-${button.color}`} data-testid={button.type} >
       <div className={val === 0 ? 'invisible' : ""}>{betPrice * val}</div>
       <div className={`invisible flex ${control === Control.PLAY ? "betPosition" : ""}`}>
         <button data-testid={`decrement${button.type}`} onClick={e => updateVal(e, Increase.DECREMENT)}>-</button>
